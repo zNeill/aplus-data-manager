@@ -1,0 +1,55 @@
+# 🚀 Node.js & Dependencies
+node_modules/
+package-lock.json
+
+# 🚀 Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+error.log
+
+# 🚀 Environment Variables (DO NOT COMMIT SECRETS)
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# 🚀 Docker & Database Data
+docker-compose.override.yml
+pg_data/
+postgres-data/
+
+# 🚀 Cache & Build Files
+.cache/
+dist/
+coverage/
+
+# 🚀 System & Editor Files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+*.iml
+
+# 🚀 Docker Secrets (If used again in future)
+secrets/
+*.secret
+
+# 🚀 Temporary Files
+tmp/
+*.tmp
+*.bak
+
+# 🚀 Ignore Zipped Archives
+*.zip
+*.tar
+*.gz
+
+# Ignore Tombstone
+🪦/

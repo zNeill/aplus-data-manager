@@ -1,0 +1,30 @@
+{
+  "name": "certain-cache",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "axios": "^1.3.4",
+    "basic-auth": "^2.0.1",
+    "bcryptjs": "^3.0.2",
+    "bullmq": "^3.11.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "ioredis": "^4.28.5",
+    "p-queue": "^8.1.0",
+    "pg": "^8.8.0",
+    "winston": "^3.8.1",
+    "winston-daily-rotate-file": "^5.0.0"
+  },
+  "description": "A system for aplusmeetings to deal with certain requests",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
