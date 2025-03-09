@@ -6,7 +6,7 @@ This app serves as an intermediary between client's existing web applications an
 
 ## Usage
 
-This project is made available to the public at this time for reference and auditing purposes. Feedback on this project is welcomed, please create a GitHub issue with any comments, or for any security matters please see contact information below.
+This project is **proprietary and closed-source**. All rights are reserved by the author. Unauthorized distribution, modification, or use of this code is strictly prohibited. This project is made available to the public at this time for reference and auditing purposes. Feedback on this project is welcomed, please create a GitHub issue with any comments, or for any security matters please see contact information below.
 
 If you would like to use any part of this code in any project, please contact me; I'm not unreasonable! 😄 With that stated, no part of this project may be used without explicit written permission of the owner.
 
