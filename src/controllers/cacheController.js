@@ -29,7 +29,7 @@ async function getCachedResponse(object, accountCode, eventCode, identifierCode,
             SELECT response FROM api_cache
             WHERE object = $1 
             AND account_code = $2 
-            AND event_code = $3
+            AND (event_code IS NOT DISTINCT FROM $3)
             AND (identifier_code IS NOT DISTINCT FROM $4)
             AND (query_params::jsonb = $5::jsonb)
             AND created_at >= NOW() - INTERVAL '${CACHE_EXPIRATION_HOURS} hours'  -- Only fetch recent cache entries

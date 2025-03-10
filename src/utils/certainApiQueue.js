@@ -91,7 +91,8 @@ certainApiQueue.process(20, async (job) => {
  * Queue an API request and return the result.
  */
 async function fetchCertainApi(object, accountCode, eventCode, identifierCode, params = {}) {
-    let apiUrl = `${process.env.CERTAIN_API_BASE}/certainExternal/service/v1/${object}/${accountCode}/${eventCode}`;
+    let apiUrl = `${process.env.CERTAIN_API_BASE}/certainExternal/service/v1/${object}/${accountCode}`;
+    if (eventCode) apiUrl += `/${eventCode}`;
     if (identifierCode) apiUrl += `/${identifierCode}`;
     apiUrl = apiUrl.replace(/\s+/g, ''); // Ensure URL has no spaces
 
