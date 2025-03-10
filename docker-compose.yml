@@ -3,7 +3,7 @@ version: '3.8'
 services:
   
   app:
-    container-name: app
+    container_name: app
     image: aplus-dm-v1
     env_file:
       - .env
