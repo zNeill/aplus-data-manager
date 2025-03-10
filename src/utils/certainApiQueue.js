@@ -9,7 +9,7 @@ const CERTAIN_API_USERNAME = decrypt(process.env.CERTAIN_API_USERNAME_ENCRYPTED)
 const CERTAIN_API_PASSWORD = decrypt(process.env.CERTAIN_API_PASSWORD_ENCRYPTED);
 
 // Create a Bull queue using the Redis endpoint
-const redisUrl = process.env.REDIS_URL || 'redis://127.0.0.1:6379';
+const redisUrl = process.env.REDIS_URL;
 const certainApiQueue = new Queue('certainApiQueue', redisUrl);
 
 // Listen for queue errors
