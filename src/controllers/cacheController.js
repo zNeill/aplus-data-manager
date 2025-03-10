@@ -1,16 +1,8 @@
 const pool = require('../config/db');
-const Redis = require('ioredis');
 const logger = require('../utils/logger');
 const { decrypt } = require('../utils/encryptCredentials');
 const { fetchCertainApi } = require('../utils/certainApiQueue.js');
-
 require('dotenv').config();
-
-// Initialize Redis connection
-const redis = new Redis({
-    host: process.env.REDIS_HOST || 'localhost',
-    port: process.env.REDIS_PORT || 6379
-});
 
 // Load and decrypt Certain API credentials
 const CERTAIN_API_USERNAME = decrypt(process.env.CERTAIN_API_USERNAME_ENCRYPTED);
