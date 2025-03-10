@@ -14,6 +14,23 @@ const createRotateTransport = (level, filename, symlinkName) => {
     });
 };
 
+// Check if running in AWS Lambda
+const isLambda = !!process.env.LAMBDA_TASK_ROOT;
+
+// Define transports based on environment
+const transports = [
+    new winston.transports.Console() // Always log to console in Lambda and local environments
+];
+
+if (!isLambda) {
+    // Add file transports only if not running in Lambda
+    transports.push(
+        createRotateTransport('info', 'app', 'current.log'),
+        createRotateTransport('error', 'errors', 'current.error.log'),
+        createRotateTransport('warn', 'warnings', 'current.warning.log')
+    );
+}
+
 // Create Winston logger
 const logger = winston.createLogger({
     level: 'info', // Default log level
@@ -21,14 +38,7 @@ const logger = winston.createLogger({
         winston.format.timestamp(),
         winston.format.json()
     ),
-    transports: [
-        new winston.transports.Console(), // Console log output
-
-        // Rotating logs with symlinks
-        createRotateTransport('info', 'app', 'current.log'),
-        createRotateTransport('error', 'errors', 'current.error.log'),
-        createRotateTransport('warn', 'warnings', 'current.warning.log')
-    ]
+    transports
 });
 
 module.exports = logger;
