@@ -1,10 +1,9 @@
-version: '3.8'
-
 services:
   
   app:
     container_name: app
-    image: aplus-dm-v1
+    image: aplus-dm-v2
+    profiles: ["prod"]
     env_file:
       - .env
     environment:
@@ -26,6 +25,7 @@ services:
 
   postgres:
     container_name: postgres
+    profiles: ["dev"]
     image: postgres:latest
     restart: unless-stopped
     env_file: 
@@ -47,6 +47,7 @@ services:
       - "6379:6379"
   nginx:
     container_name: nginx
+    profiles: ["prod"]
     image: nginx:latest
     restart: unless-stopped
     volumes:
