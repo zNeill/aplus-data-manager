@@ -21,6 +21,7 @@
     "pg": "^8.8.0",
     "serverless-http": "^3.2.0",
     "winston": "^3.8.1",
+    "winston-cloudwatch": "^6.3.0",
     "winston-daily-rotate-file": "^5.0.0"
   },
   "description": "A system for aplusmeetings to deal with certain requests",
