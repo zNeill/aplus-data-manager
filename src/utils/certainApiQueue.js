@@ -8,20 +8,31 @@ const Queue = require('bull');
 const CERTAIN_API_USERNAME = decrypt(process.env.CERTAIN_API_USERNAME_ENCRYPTED);
 const CERTAIN_API_PASSWORD = decrypt(process.env.CERTAIN_API_PASSWORD_ENCRYPTED);
 
-// Create a Bull queue using the Redis endpoint. The URL can be provided via process.env.REDIS_URL.
+// Create a Bull queue using the Redis endpoint
 const redisUrl = process.env.REDIS_URL || 'redis://127.0.0.1:6379';
 const certainApiQueue = new Queue('certainApiQueue', redisUrl);
 
-// Process jobs inline with a concurrency of 20. This function replicates the retry logic from before.
+// Listen for queue errors
+certainApiQueue.on('error', (err) => {
+    logger.error(`❌ Queue error: ${err.message}`);
+});
+
+// Listen for job failures
+certainApiQueue.on('failed', (job, err) => {
+    logger.error(`❌ Job failed: ${err.message}`);
+});
+
+// Process jobs with a concurrency of 20
 certainApiQueue.process(20, async (job) => {
     const { apiUrl, params } = job.data;
-    logger.info(`🌍 Processing API request: ${apiUrl} with params ${JSON.stringify(params)}`);
+    logger.info(`ℹ️ Processing API request: ${apiUrl} with params ${JSON.stringify(params)}`);
 
     let attempt = 0;
+    const maxAttempts = 10; // Prevent infinite retries
     const maxWaitTime = 120000; // 2 minutes max wait
     let waitTime = 2000; // Start with a 2-second delay on 429 errors
 
-    while (true) {
+    while (attempt < maxAttempts) {
         try {
             const response = await axios.get(apiUrl, {
                 headers: {
@@ -50,10 +61,10 @@ certainApiQueue.process(20, async (job) => {
                 // Handle 429 Rate Limit with exponential backoff
                 if (status === 429) {
                     attempt++;
-                    logger.warn(`⚠️ Rate limit hit (429) on attempt ${attempt} for ${apiUrl}. Retrying in ${waitTime / 1000}s...`);
+                    logger.warn(`⚠️ 🏃 Rate limit hit (429) on attempt ${attempt} for ${apiUrl}. Retrying in ${waitTime / 1000}s...`);
 
-                    if (waitTime >= maxWaitTime) {
-                        logger.error(`❌ Max wait time exceeded for ${apiUrl}.`);
+                    if (waitTime >= maxWaitTime || attempt >= maxAttempts) {
+                        logger.error(`❌ Max retries reached for ${apiUrl}.`);
                         return null;
                     }
 
@@ -78,19 +89,23 @@ certainApiQueue.process(20, async (job) => {
 
 /**
  * Queue an API request and return the result.
- * This function builds the URL, adds the job to the Redis-backed queue,
- * and awaits the job's completion (keeping the same calling behavior).
  */
 async function fetchCertainApi(object, accountCode, eventCode, identifierCode, params = {}) {
     let apiUrl = `${process.env.CERTAIN_API_BASE}/certainExternal/service/v1/${object}/${accountCode}/${eventCode}`;
     if (identifierCode) apiUrl += `/${identifierCode}`;
     apiUrl = apiUrl.replace(/\s+/g, ''); // Ensure URL has no spaces
 
-    logger.info(`🌍 Queueing API request: ${apiUrl} with params ${JSON.stringify(params)}`);
+    logger.info(`🌍⏳ Queueing API request: ${apiUrl} with params ${JSON.stringify(params)}`);
 
-    // Add the job to the queue and wait for its completion.
+    // Add the job to the queue
     const job = await certainApiQueue.add({ apiUrl, params });
-    return job.finished();
+
+    return new Promise((resolve, reject) => {
+        job.finished()
+            .then(resolve)
+            .catch(reject);
+        setTimeout(() => reject(new Error("Job timeout exceeded!")), 120000); // Timeout at 2 minutes
+    });
 }
 
 /**
@@ -99,8 +114,8 @@ async function fetchCertainApi(object, accountCode, eventCode, identifierCode, p
 async function getQueueStatus() {
     const counts = await certainApiQueue.getJobCounts();
     const concurrencyLimit = 20; // as set in the process() call
-    // Estimate wait time (assuming average 2s per job in waiting)
     const estimatedWaitTimeSeconds = Math.round((counts.waiting || 0) * 0.5);
+    
     const queueReport = {
         waiting: counts.waiting || 0,
         active: counts.active || 0,
@@ -108,7 +123,8 @@ async function getQueueStatus() {
         concurrencyLimit,
         estimatedWaitTimeSeconds
     };
-    logger.info("⌛ Queue Report: JSON.stringify(queueReport)");
+    
+    logger.info(`⌛ Queue Report: ${JSON.stringify(queueReport)}`);
     return queueReport;
 }
 

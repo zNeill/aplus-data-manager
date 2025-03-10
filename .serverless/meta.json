@@ -1,0 +1,73 @@
+{
+  "unknown": {
+    "versionFramework": "4.7.0",
+    "command": [],
+    "options": {},
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
+  },
+  "/Users/neill/aplus-data-manager/serverless.yml": {
+    "versionFramework": "4.7.0",
+    "servicePath": "/Users/neill/aplus-data-manager/serverless.yml",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "org": "milehightechnologyconsulting",
+      "app": "aplus-data-manager",
+      "service": "aplus-data-manager",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "stage": "dev",
+        "region": "us-east-1",
+        "versionFunctions": true
+      },
+      "functions": {
+        "api": {
+          "handler": "src/lambda.handler",
+          "events": [
+            {
+              "httpApi": "*"
+            }
+          ]
+        }
+      }
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs18.x",
+      "stage": "dev",
+      "region": "us-east-1",
+      "versionFunctions": true
+    },
+    "dashboard": {
+      "isEnabledForService": true,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": {
+        "providers": false,
+        "monitoring": false
+      },
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": "J5QDRFNzmfGZfP4V1N",
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "serviceRawFile": "# \"org\" ensures this Service is used with the correct Serverless Framework Access Key.\norg: milehightechnologyconsulting\n# \"app\" enables Serverless Framework Dashboard features and sharing them with other Services.\napp: aplus-data-manager\n# \"service\" is the name of this project. This will also be added to your AWS resource names.\nservice: aplus-data-manager\n\nprovider:\n  name: aws\n  runtime: nodejs18.x\n\nfunctions:\n  api:\n    handler: src/lambda.handler\n    events:\n      - httpApi: \"*\"\n",
+    "command": [
+      "help"
+    ],
+    "options": {},
+    "orgId": "21effb7d-97e1-4adf-a7ae-0e47ee724a78",
+    "orgName": "milehightechnologyconsulting",
+    "userId": "mZFxzgZpcK0VCtD0ql",
+    "userName": "milehightechnologyconsulting",
+    "serviceProviderAwsAccountId": "976382131936",
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
+  }
+}

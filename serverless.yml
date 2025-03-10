@@ -1,0 +1,20 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: milehightechnologyconsulting
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: aplus-data-manager
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: aplus-data-manager
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+plugins:
+  - serverless-offline
+
+functions:
+  api:
+    handler: src/lambda.handler
+    timeout: 30
+    events:
+      - httpApi: "*"

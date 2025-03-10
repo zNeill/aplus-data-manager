@@ -18,6 +18,11 @@ error.log
 .env.test
 .env.production
 
+
+# 🚀 Serverless
+.serverless/
+.serverless/*
+
 # 🚀 Docker & Database Data
 docker-compose.override.yml
 pg_data/

@@ -27,7 +27,7 @@
   },
   "description": "A system for aplusmeetings to deal with certain requests",
   "author": "",
-  "license": "ISC",
+  "license": "NONE",
   "devDependencies": {
     "nodemon": "^3.1.9",
     "serverless-offline": "^14.4.0"
