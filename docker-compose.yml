@@ -1,6 +1,27 @@
 version: '3.8'
 
 services:
+  
+  app:
+    container-name: app
+    image: aplus-dm-v1
+    env_file:
+      - .env
+    environment:
+      PORT: ${PORT}
+      CACHE_EXPIRATION_HOURS: ${CACHE_EXPIRATION_HOURS}
+      REDIS_URL: ${REDIS_URL}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      CERTAIN_API_BASE: ${CERTAIN_API_BASE}
+      DEFAULT_ACCOUNT_CODE: ${DEFAULT_ACCOUNT_CODE}
+      CERTAIN_API_USERNAME_ENCRYPTED: ${CERTAIN_API_USERNAME_ENCRYPTED}
+      CERTAIN_API_PASSWORD_ENCRYPTED: ${CERTAIN_API_PASSWORD_ENCRYPTED}
+      SECRET_KEY: ${SECRET_KEY}
+    ports:
+      - "8080:8080"
   postgres:
     container_name: postgres
     image: postgres:latest
