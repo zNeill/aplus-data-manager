@@ -20,3 +20,8 @@ CREATE TABLE users (
     password TEXT NOT NULL
 );
 CREATE INDEX idx_users_username ON users(username);
+
+
+ALTER TABLE api_cache 
+ADD CONSTRAINT unique_api_cache 
+UNIQUE (object, account_code, event_code, identifier_code, query_params);
