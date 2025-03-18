@@ -53,9 +53,9 @@ async function getCachedResponse(object, accountCode, eventCode, identifierCode,
  * Save API response to cache in PostgreSQL
  */
 async function saveToCache(object, accountCode, eventCode, response, identifierCode, queryParamsJSON) {
+    // Insert empty object if response is null 
     if (!response) {
-        logger.warn(`⚠️ Skipping cache write: Empty response for ${object}, event: ${eventCode}, identifier: ${identifierCode}`);
-        return; // ✅ Do not attempt to insert NULL responses
+        response = {}
     }
 
     logger.info(`📝 Writing to cache: object=${object}, account=${accountCode}, event=${eventCode}, identifier=${identifierCode}, params=${queryParamsJSON}`);

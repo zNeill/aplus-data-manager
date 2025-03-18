@@ -49,14 +49,13 @@ async function hydrateRegistrantCache(eventCode, regCode) {
 
             // ✅ Step 3: If response is null, correctly log it as skipped
             if (!response) {
-                logger.warn(`⚠️ No data received for ${object}. Skipping caching.`);
-                results.push({ object, status: 'skipped (no data)' });
-                continue; // Skip caching
-            }
+                logger.warn(`⚠️ Caching EMPTY result for eventCode=${eventCode} object=${object} identifierCode=${identifierCode} queryParams=${JSON.stringify(queryParams)}`);
+                results.push({ object, status: '(cached empty result)' });
+                }
 
             // ✅ Step 4: Save to cache and log it correctly
             await saveToCache(object, accountCode, eventCode, response, identifierCode, queryParamsJSON);
-            logger.info(`✅ Cached ${object} data successfully.`);
+            logger.info(`✅ Cached successfully:  eventCode=${eventCode} object=${object} identifierCode=${identifierCode} queryParams=${JSON.stringify(queryParams)}`);
             results.push({ object, identifierCode, queryParams, status: 'cached' });
 
         } catch (error) {
@@ -135,7 +134,7 @@ async function hydrateEventCache(eventCode) {
         logger.info(`✅ Completed parallel event-wide hydration for event ${eventCode}`);
 
         return {
-            message: `Parallel event-wide hydration completed for ${eventCode}`,
+            message: `✅ Parallel event-wide hydration completed for ${eventCode}`,
             total: regCodes.length,
             results
         };
