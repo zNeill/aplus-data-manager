@@ -11,11 +11,8 @@ RUN npm install
 # Copy the rest of the application
 COPY . .
 
-# Install nodemon for hot-reloading (for development)
-RUN npm install -g nodemon
-
 # Expose the port
-EXPOSE 5000
+EXPOSE 8080
 
 # Start the application
 CMD ["node", "src/server.js"]
