@@ -12,9 +12,8 @@ const CERTAIN_API_PASSWORD = decrypt(process.env.CERTAIN_API_PASSWORD_ENCRYPTED)
 // Create a Bull queue using the Redis endpoint
 const redisUrl = process.env.REDIS_URL;
 const redisClient = new Redis(redisUrl);
-redisClient.on('error', (err) => {
-    logger.error(`❌ Redis error: ${err.message}`);
-});
+redisclient.on('connect', () => logger.info('✅ connected to redis.'));
+redisclient.on('error', (err) => logger.error(`❌ redis error: ${err.message}`));
 const certainApiQueue = new Queue('certainApiQueue', { 
     redis: { client: redisClient }
 });
