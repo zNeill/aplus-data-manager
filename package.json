@@ -1,6 +1,6 @@
 {
   "name": "aplus-data-manager",
-  "version": "2.2.2",
+  "version": "2.3",
   "main": "src/server.js",
   "type": "commonjs",
   "scripts": {

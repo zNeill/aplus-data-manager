@@ -1,9 +1,12 @@
 const express = require('express');
-const { cleanCacheHandler }= require('../controllers/maintenanceController');
+const { cleanCacheByHoursHandler, cleanCacheByEventHandler }= require('../controllers/maintenanceController');
+const { resetEventCacheHandler } = require('../controllers/cacheHydrationController');
 
 const router = express.Router();
+router.get('/clear/event/:eventCode', cleanCacheByEventHandler);
 
-// ✅ Hydrate a Single Registrant - MUST be above the event route
-router.get('/clear-cache/:hours?', cleanCacheHandler);
+router.get('/clear/all/:hours?', cleanCacheByHoursHandler);
+
+router.get('/refresh/event/:eventCode',resetEventCacheHandler);
 
 module.exports = router;

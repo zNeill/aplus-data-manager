@@ -78,9 +78,45 @@ async function saveToCache(object, accountCode, eventCode, response, identifierC
     }
 }
 
+/**
+ * Delete Event Cache
+ * params: eventCode
+ * returns: deleted row count
+ */
+async function deleteEventCache(eventCode) {
+  const query = `DELETE from api_cache where event_code = '${eventCode}';`
+  try {
+    const { rowCount } = await pool.query(query);
+    const message = `🧽 Cleaned ${rowCount} entries from cache for event ${eventCode}`;
+    return message;
+  } catch (error) {
+    logger.error(`❌ Database error while deleting event ${eventCode} cache: ${error.message}`);
+  }
+}
 
+/** 
+ * Delete Aged Cache by Hour
+ * param: hours to delete (now minus...)
+ * return: deleted row count
+ */
+ async function deleteAgedCache(hours) {
 
+    try {
+        logger.info(`🗑️ Cleaning up cache: Removing entries older than ${hours} hours...`);
 
+        const query = `
+            DELETE FROM api_cache 
+            WHERE created_at < NOW() - INTERVAL '${hours} hours';
+        `;
+    
+        const { rowCount } = await pool.query(query);
+        const message = `✅ 🗑 Cache cleanup completed. Removed ${rowCount} old entries older than ${hours} hours.`;
+        return message;
+    } catch (error) {
+        const message = `❌ Database operation failed: ${error.message}`;
+        logger.error(message); 
+    }
+ }
 
 /**
  * Handle Certain-like API Request
@@ -118,4 +154,4 @@ async function handleApiRequest(req, res) {
 
 
 
-module.exports = { handleApiRequest, saveToCache, getCachedResponse };
+module.exports = { handleApiRequest, saveToCache, getCachedResponse, deleteEventCache, deleteAgedCache };

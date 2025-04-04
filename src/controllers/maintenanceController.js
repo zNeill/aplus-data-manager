@@ -1,35 +1,32 @@
 require('dotenv').config();
-const pool = require('../config/db');
+const { deleteEventCache, deleteAgedCache } = require('./cacheController');
 const logger = require('../utils/logger');
 
 
-async function cleanCacheHandler(req, res) { 
+async function cleanCacheByHoursHandler(req, res) { 
     const hours = req.params.hours || 168;
-
     try {
-        logger.info(`🗑️ Cleaning up cache: Removing entries older than ${hours} hours...`);
-
-        const query = `
-            DELETE FROM api_cache 
-            WHERE created_at < NOW() - INTERVAL '${hours} hours';
-        `;
-
-        const { rowCount } = await pool.query(query);
-
-        const message = `✅🗑 ️ Cache cleanup completed. Removed ${rowCount} old entries older than ${hours} hours.`;
-
+        const message = await deleteAgedCache(hours);
         logger.info(message);
-        
-        res.json({"message": message})
-
+        res.json({message: message})
     } catch (error) {
-
         const message = `❌ Cache cleanup failed: ${error.message}`;
-
         logger.error(message);
-
         res.status(500).json({ message: 'Cache cleanup failed', error: error.message });
     }
 }
 
-module.exports = { cleanCacheHandler };
+async function cleanCacheByEventHandler (req, res) {
+    const eventCode = req.params.eventCode;
+    try {
+        const message = await deleteEventCache(eventCode);
+        logger.info(message);
+        res.json({message: message})
+    } catch (error) {
+        const message = `❌ Failed to delete event cache`;
+        logger.error({message: message, error: error})
+        res.status(500).json({message: message, error: error})
+    }
+}
+
+module.exports = { cleanCacheByHoursHandler, cleanCacheByEventHandler };

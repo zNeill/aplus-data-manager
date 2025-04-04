@@ -1,6 +1,8 @@
-const { getCachedResponse, saveToCache } = require('./cacheController');
+const { getCachedResponse, saveToCache, deleteEventCache } = require('./cacheController');
 const { fetchCertainApi } = require('../utils/certainApiQueue');
 const logger = require('../utils/logger');
+const { EventEmitter } = require('winston-daily-rotate-file');
+const { clear } = require('winston');
 
 /**
  * Hydration of individual registrant's data
@@ -119,6 +121,8 @@ async function hydrateEventCache(eventCode) {
 
         logger.info(`✅ Found ${regCodes.length} registrants for event ${eventCode}, starting parallel processing...`);
 
+
+
         // 🟢 Step 2: Process each registrant in parallel
         const hydrationResults = await Promise.allSettled(
             regCodes.map(regCode => hydrateRegistrantCache(eventCode, regCode))
@@ -157,8 +161,20 @@ async function hydrateEventCacheHandler(req, res) {
     }
 }
 
+async function resetEventCacheHandler(req, res) {
+    const { eventCode } = req.params;
+    try {
+        const clearResult = await deleteEventCache(eventCode)
+        const hydrateResult = await hydrateEventCache(eventCode);
+        res.json({"eventClearResult": clearResult, "eventHydrationResult": hydrateResult});
+    } catch (error) {
+        logger.error(`❌ Event hydration failed: ${error.message}`);
+        res.status(500).json({ message: 'Event hydration failed', error: error.message });
+    }
+}
+
 
 
 //  Export "handler" functions
-module.exports = { hydrateRegistrantCacheHandler, hydrateEventCacheHandler };
+module.exports = { hydrateRegistrantCacheHandler, hydrateEventCacheHandler, resetEventCacheHandler };
 
