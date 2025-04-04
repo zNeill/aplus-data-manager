@@ -14,9 +14,7 @@ const redisUrl = process.env.REDIS_URL;
 const redisClient = new Redis(redisUrl);
 redisClient.on('connect', () => logger.info('✅ connected to redis.'));
 redisClient.on('error', (err) => logger.error(`❌ redis error: ${err.message}`));
-const certainApiQueue = new Queue('certainApiQueue', { 
-    redis: { client: redisClient }
-});
+const certainApiQueue = new Queue('certainApiQueue',redisUrl);
 
 // Ensure event listeners are added only once
 if (certainApiQueue.listenerCount('error') === 0) {
