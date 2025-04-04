@@ -2,7 +2,7 @@ services:
   
   app:
     container_name: app
-    image: aplus-dm-v2.2.3
+    image: aplus-dm-v2.1
     profiles: ["prod"]
     env_file:
       - .env
@@ -21,6 +21,31 @@ services:
       SECRET_KEY: ${SECRET_KEY}
     ports:
       - "8080:8080"
+    restart: unless-stopped
+    depends_on:
+      - redis
+
+  staging:
+    container_name: staging
+    image: aplus-dm-v2.3
+    profiles: ["prod"]
+    env_file:
+      - .env
+    environment:
+      PORT: ${PORT}
+      CACHE_EXPIRATION_HOURS: ${CACHE_EXPIRATION_HOURS}
+      REDIS_URL: ${REDIS_URL}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      CERTAIN_API_BASE: ${CERTAIN_API_BASE}
+      DEFAULT_ACCOUNT_CODE: ${DEFAULT_ACCOUNT_CODE}
+      CERTAIN_API_USERNAME_ENCRYPTED: ${CERTAIN_API_USERNAME_ENCRYPTED}
+      CERTAIN_API_PASSWORD_ENCRYPTED: ${CERTAIN_API_PASSWORD_ENCRYPTED}
+      SECRET_KEY: ${SECRET_KEY}
+    ports:
+      - "8888:8080"
     restart: unless-stopped
     depends_on:
       - redis
