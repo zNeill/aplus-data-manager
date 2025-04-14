@@ -105,7 +105,7 @@ async function hydrateEventCache(eventCode) {
             accountCode,
             eventCode,
             null,
-            { isActive: true, listFields: 'registrationCode', isTestMode: false }
+            { isActive: true, listFields: 'registrationCode' }
         );
 
         if (!registrationListResponse || !registrationListResponse.registrationList) {

@@ -27,7 +27,7 @@ services:
 
   staging:
     container_name: staging
-    image: aplus-dm-v2.3.1
+    image: aplus-dm-v2.3.2
     profiles: ["prod"]
     env_file:
       - .env
