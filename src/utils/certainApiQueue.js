@@ -48,7 +48,7 @@ if (certainApiQueue.listenerCount('retrying') === 0) {
 }
 
 // Process jobs with a concurrency of 20
-certainApiQueue.process(20, async (job) => {
+certainApiQueue.process(10, async (job) => {
     const { apiUrl, params } = job.data;
     logger.info(`ℹ️ Processing API request: ${apiUrl} with params ${JSON.stringify(params)}`);
 
